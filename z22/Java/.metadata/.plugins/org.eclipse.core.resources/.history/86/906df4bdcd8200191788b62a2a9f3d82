@@ -1,0 +1,61 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+public class MapToFile {
+	
+    public void writeObject(Map<String,String> map) {  
+    	
+       try {        
+			FileOutputStream outStream = new FileOutputStream("/DictW.txt");  
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outStream);  
+			objectOutputStream.writeObject(map);  
+            outStream.close();   
+        } catch (FileNotFoundException e) {  
+            e.printStackTrace();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }  
+       
+    }  
+      
+    public Map<String,String> readObject(){  
+        FileInputStream freader;  
+        Map<String,String> map = new HashMap<String,String>();  
+        try {  
+            freader = new FileInputStream("/DictW.txt");  
+            ObjectInputStream objectInputStream = new ObjectInputStream(freader);  
+            map = (HashMap<String, String>) objectInputStream.readObject();  
+              
+        } catch (FileNotFoundException e) {  
+            // TODO Auto-generated catch block  
+            e.printStackTrace();  
+        } catch (IOException e) {  
+            // TODO Auto-generated catch block  
+            e.printStackTrace();  
+        } catch (ClassNotFoundException e) {  
+            // TODO Auto-generated catch block  
+            e.printStackTrace();  
+        }  
+        
+        return map;
+          
+    }  
+      
+      
+    public static void main(String args[]){  
+    	MapToFile mf = new MapToFile();  
+    	Map<String,String> map = new HashMap<String,String>();  
+    	map.put("1", "abc");
+    	map.put("2", "efg");
+    	
+        of.writeObject();  
+        of.readObject();  
+    }  
+
+}

@@ -1,0 +1,174 @@
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+public class SSE {
+	
+	
+	public String[] keywords;
+	private String HMACKey;
+	private int ID_length;
+	
+	public Map<String, Integer> SrcCnt = new HashMap<String, Integer>();
+	private Map<String, Integer> FileCnt = new HashMap<String, Integer>();
+
+
+	public SSE(String[] keywords, String HMACKey, int ID_length) {
+		
+		this.keywords = keywords;
+		this.HMACKey = HMACKey;
+		this.ID_length = ID_length;
+	}
+
+	public Map<String, byte[]> setup() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+				
+		Map<String, byte[]> DictW = new HashMap<String, byte[]>();
+		for(int i = 0; i < keywords.length; i++) {
+			
+			// Initialize the map FileCnt
+			FileCnt.put(keywords[i], 0);
+			SrcCnt.put(keywords[i], 0);
+		}
+		
+		return DictW;
+		
+	}
+	
+	public List<String> C2SRequest(String requestKeyword) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, Exception {
+		
+		List<String> locList = new ArrayList<String>();
+		
+		for(int i = 0; i < FileCnt.get(requestKeyword); i++) {
+			
+			String k_w = requestKeyword + String.valueOf(i) + String.valueOf(SrcCnt.get(requestKeyword));
+			
+			byte[] addr = HMAC.HmacSHA1Encrypt(k_w + "0", HMACKey);
+			locList.add(Arrays.toString(addr));			
+		}
+		
+		return locList;
+	}
+	
+	public List<byte[]> S2CResponse(List<String> locList, Map<String, byte[]> DictW) {
+				
+		
+		List<byte[]> ValList = new ArrayList<byte[]>();
+		for(int i = 0; i < locList.size(); i++) {
+			String key = locList.get(i);
+			ValList.add(DictW.get(key));
+		}
+		
+		return ValList;
+	}
+		
+	public Map<String, byte[]> searchProcess(String searchKeyword, Map<String, byte[]> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, Exception {
+		
+//		System.out.println("start search");
+		List<String> locList = C2SRequest(searchKeyword);
+		List<byte[]> ValList = S2CResponse(locList, DictW);
+		
+		List<String> IDList = new ArrayList<String>();
+		
+		
+		for(int i = 0; i < ValList.size(); i++) {
+			
+
+			byte[] cipher = ValList.get(i);
+			
+			String k_w = searchKeyword + String.valueOf(i) + String.valueOf(SrcCnt.get(searchKeyword));			
+			byte[] value = HMAC.HmacSHA1Encrypt(k_w + "1", HMACKey);
+					
+			byte[] IDByte = new byte[value.length]; 
+			
+			for(int j = 0; j < IDByte.length; j++)
+				IDByte[j] = (byte) (cipher[j] ^ value[j]);
+			
+			String ID = util.byteArrToBinStr(IDByte);
+			
+			System.out.println(+ ID);
+			
+			IDList.add(ID.substring(0, ID_length - 1));
+			
+		}
+		
+		SrcCnt.put(searchKeyword, SrcCnt.get(searchKeyword) + 1);		
+		
+		int FileCntKeyword = 0;
+		
+		for(int i = 0; i < ValList.size(); i++)
+		{
+			
+			String k_w = searchKeyword + String.valueOf(i) + String.valueOf(SrcCnt.get(searchKeyword));
+			
+			String updateID = IDList.get(i);
+			
+			byte[] addr = HMAC.HmacSHA1Encrypt(k_w + "0", HMACKey);
+			byte[] value = HMAC.HmacSHA1Encrypt(k_w + "1", HMACKey);
+			
+			updateID = updateID + String.valueOf(1);
+			
+			byte[] updateIDByte = updateID.getBytes();
+			
+			byte[] cipher = new byte[value.length];
+			
+			for(int j = 0; j < updateIDByte.length; j++) 
+				cipher[j] = (byte) (updateIDByte[j] ^ value[j]);	
+			
+			for(int j = updateIDByte.length; j < value.length; j++) 
+				cipher[j] = value[j];	
+			
+			FileCntKeyword = FileCntKeyword + 1;
+			DictW.put(Arrays.toString(addr), cipher);
+			
+		}
+		
+		FileCnt.put(searchKeyword, FileCntKeyword);
+		
+		return DictW;
+
+		}
+	
+	public Map<String, byte[]> updateProcess(String updateKeyword, String updateID, int op, Map<String, byte[]> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, Exception {
+		
+		String k_w = updateKeyword + String.valueOf(FileCnt.get(updateKeyword)) + String.valueOf(SrcCnt.get(updateKeyword));
+						
+		byte[] addr = HMAC.HmacSHA1Encrypt(k_w + "0", HMACKey);	
+		byte[] value = HMAC.HmacSHA1Encrypt(k_w + "1", HMACKey);
+		
+
+		updateID = updateID + String.valueOf(op);
+		byte[] updateIDByte = util.binStrToByteArr(updateID);
+		
+		byte[] cipher = new byte[value.length];
+		
+		for(int i = 0; i < updateIDByte.length; i++) 
+			cipher[i] = (byte) (updateIDByte[i] ^ value[i]);
+		
+		for(int i = updateIDByte.length; i < value.length; i++)
+			cipher[i] = value[i];
+		
+		
+		FileCnt.put(updateKeyword, FileCnt.get(updateKeyword) + 1);
+		
+		DictW.put(Arrays.toString(addr), cipher);
+		
+		return DictW;
+		
+	}
+	
+}

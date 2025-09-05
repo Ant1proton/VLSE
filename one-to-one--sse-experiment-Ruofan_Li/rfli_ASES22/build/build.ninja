@@ -1,0 +1,164 @@
+## This file contains all the build statements describing the
+# compilation DAG.
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# 
+# Which is the root file.
+# =============================================================================
+
+# =============================================================================
+# Project: ASES22
+# Configurations: Debug
+# =============================================================================
+
+#############################################
+# Minimal version of Ninja required by this file
+
+ninja_required_version = 1.5
+
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Debug
+# =============================================================================
+# Include auxiliary files.
+
+
+#############################################
+# Include rules file.
+
+include CMakeFiles/rules.ninja
+
+# =============================================================================
+
+#############################################
+# Logical path to working directory; prefix for absolute paths.
+
+cmake_ninja_workdir = /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/
+# =============================================================================
+# Object build statements for EXECUTABLE target main
+
+
+#############################################
+# Order-only phony target for main
+
+build cmake_object_order_depends_target_main: phony || CMakeFiles/main.dir
+
+build CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/main.cpp.o: CXX_COMPILER__main_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/main.cpp || cmake_object_order_depends_target_main
+  DEP_FILE = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/main.cpp.o.d
+  FLAGS = -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include
+  OBJECT_DIR = CMakeFiles/main.dir
+  OBJECT_FILE_DIR = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22
+
+build CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/BCP.cpp.o: CXX_COMPILER__main_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/BCP.cpp || cmake_object_order_depends_target_main
+  DEP_FILE = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/BCP.cpp.o.d
+  FLAGS = -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include
+  OBJECT_DIR = CMakeFiles/main.dir
+  OBJECT_FILE_DIR = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src
+
+build CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/ASES22.cpp.o: CXX_COMPILER__main_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/ASES22.cpp || cmake_object_order_depends_target_main
+  DEP_FILE = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/ASES22.cpp.o.d
+  FLAGS = -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include
+  OBJECT_DIR = CMakeFiles/main.dir
+  OBJECT_FILE_DIR = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src
+
+build CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o: CXX_COMPILER__main_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp || cmake_object_order_depends_target_main
+  DEP_FILE = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o.d
+  FLAGS = -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include
+  OBJECT_DIR = CMakeFiles/main.dir
+  OBJECT_FILE_DIR = CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target main
+
+
+#############################################
+# Link the executable main
+
+build main: CXX_EXECUTABLE_LINKER__main_Debug CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/main.cpp.o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/BCP.cpp.o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/ASES22.cpp.o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o
+  FLAGS = -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/Cellar/gmp/6.2.1_1/lib -Wl,-rpath,/opt/homebrew/Cellar/ntl/11.5.1/lib -Wl,-rpath,/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../src -Wl,-rpath,/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../util  -lgmp  -lntl
+  LINK_PATH = -L/opt/homebrew/Cellar/gmp/6.2.1_1/lib   -L/opt/homebrew/Cellar/ntl/11.5.1/lib   -L/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../src   -L/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../util
+  OBJECT_DIR = CMakeFiles/main.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = main
+  TARGET_PDB = main.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build && /opt/homebrew/Cellar/cmake/3.23.2/bin/ccmake -S/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build -B/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build && /opt/homebrew/Cellar/cmake/3.23.2/bin/cmake --regenerate-during-build -S/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build -B/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build rebuild_cache: phony CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Target aliases.
+
+# =============================================================================
+# Folder targets.
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build
+
+build all: phony main
+
+# =============================================================================
+# Built-in targets
+
+
+#############################################
+# Re-run CMake if any of its inputs changed.
+
+build build.ninja: RERUN_CMAKE | /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCXXInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeGenericSystem.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeInitializeConfigs.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeLanguageInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/GNU.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin-Initialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake CMakeLists.txt
+  pool = console
+
+
+#############################################
+# A missing CMake input file is not an error.
+
+build /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCXXInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeGenericSystem.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeInitializeConfigs.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeLanguageInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/GNU.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin-Initialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake CMakeLists.txt: phony
+
+
+#############################################
+# Clean all the built files.
+
+build clean: CLEAN
+
+
+#############################################
+# Print all primary targets available.
+
+build help: HELP
+
+
+#############################################
+# Make the all target the default.
+
+default all

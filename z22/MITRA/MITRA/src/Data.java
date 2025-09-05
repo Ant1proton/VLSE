@@ -1,0 +1,69 @@
+import java.util.Random;
+
+public class Data {
+
+	public static String[] keywordsGenerate(int number) {
+			
+			Random random = new Random(10000);
+			String[] keywords = new String[number];
+		    String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";      
+		    
+		    
+		    for(int j = 0; j < number; j++) {
+		    	StringBuffer sb = new StringBuffer();
+		    	int length = 0;
+		    	while(length < 5) {
+		    		length = random.nextInt(7);
+		    	}
+			    
+			    for (int i = 0; i < length; i++) {
+			    	
+			        int selectNum = random.nextInt(str.length());   
+			        sb.append(str.charAt(selectNum));   
+			    }   
+			    
+			    keywords[j] = sb.toString();
+		    } 
+		    
+		    return keywords;
+	
+	}
+	
+	
+	public static String[] idsGenerate(int fileNum) {
+		
+		String[] identities = new String[fileNum];
+		int idLength = (int) Math.ceil(Math.log(fileNum)*1.0/Math.log(2));
+		
+		for(int i = 0; i < fileNum; i++) {
+			
+			String id = Integer.toBinaryString(i);
+			
+			if(id.length() < idLength) {
+				id = String.format("%0" + (idLength - id.length()) + "d", 0) + id;
+			}
+			
+			identities[i] = id;
+		}
+		
+		return identities;
+		
+	}
+	
+	public static void main(String[] args) {
+		
+//		String [] keywords = keywordsGenerate(10000);
+//		
+//		for(int i = 0; i < 10000; i++) {
+//			System.out.println(keywords[i]);
+//		}
+		
+		
+		String[] identities = idsGenerate(10000);
+		for(int i = 0; i < 10000; i++) {
+			System.out.println(identities[i]);
+		}
+		
+		
+	}
+}

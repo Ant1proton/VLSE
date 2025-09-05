@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build",
+  "command": "/usr/bin/clang++ -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../../include -I/usr/local/include/cryptopp -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/main.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/main.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/main.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build",
+  "command": "/usr/bin/clang++ -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../../include -I/usr/local/include/cryptopp -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build",
+  "command": "/usr/bin/clang++ -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../../include -I/usr/local/include/cryptopp -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/src/Pub_para.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/src/Pub_para.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/src/Pub_para.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build",
+  "command": "/usr/bin/clang++ -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/build/../../include -I/usr/local/include/cryptopp -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/src/util.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/src/util.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rf_SELPSI/src/util.cpp"
+}
+]

@@ -1,0 +1,241 @@
+## This file contains all the build statements describing the
+# compilation DAG.
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# 
+# Which is the root file.
+# =============================================================================
+
+# =============================================================================
+# Project: SSE
+# Configurations: Debug
+# =============================================================================
+
+#############################################
+# Minimal version of Ninja required by this file
+
+ninja_required_version = 1.5
+
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Debug
+# =============================================================================
+# Include auxiliary files.
+
+
+#############################################
+# Include rules file.
+
+include CMakeFiles/rules.ninja
+
+# =============================================================================
+
+#############################################
+# Logical path to working directory; prefix for absolute paths.
+
+cmake_ninja_workdir = /Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/
+# =============================================================================
+# Object build statements for EXECUTABLE target SSE
+
+
+#############################################
+# Order-only phony target for SSE
+
+build cmake_object_order_depends_target_SSE: phony || CMakeFiles/SSE.dir
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/main.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/main.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/main.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/convert.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/convert.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/convert.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/eccbaseop.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/eccbaseop.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/eccbaseop.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/prf.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/prf.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/prf.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/random.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/random.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/random.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm2.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm2.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm2.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm3.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm3.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm3.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm4.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm4.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm4.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/util.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/util.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/util.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/store_file.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/store_file.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/store_file.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/edb.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/edb.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/edb.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/tool.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/tool.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/tool.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/system.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/system.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/system.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb
+
+build CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi/psi.cpp.o: CXX_COMPILER__SSE_Debug /Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi/psi.cpp || cmake_object_order_depends_target_SSE
+  DEP_FILE = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi/psi.cpp.o.d
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11
+  INCLUDES = -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  OBJECT_FILE_DIR = CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target SSE
+
+
+#############################################
+# Link the executable SSE
+
+build SSE: CXX_EXECUTABLE_LINKER__SSE_Debug CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/main.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/convert.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/eccbaseop.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/prf.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/random.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm2.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm3.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm4.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/util.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/store_file.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/edb.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/tool.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/system.cpp.o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi/psi.cpp.o
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  LINK_LIBRARIES = -Wl,-rpath,/usr/local/lib -Wl,-rpath,/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../src  -lgmp  -lgmpxx  -lssl  -lcrypto
+  LINK_PATH = -L/usr/local/lib   -L/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../src
+  OBJECT_DIR = CMakeFiles/SSE.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = SSE
+  TARGET_PDB = SSE.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/rfli/Desktop/Code/one-to-one--sse-experiment/build && /opt/homebrew/Cellar/cmake/3.23.2/bin/ccmake -S/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build -B/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/rfli/Desktop/Code/one-to-one--sse-experiment/build && /opt/homebrew/Cellar/cmake/3.23.2/bin/cmake --regenerate-during-build -S/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build -B/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build rebuild_cache: phony CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Target aliases.
+
+# =============================================================================
+# Folder targets.
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/rfli/Desktop/Code/one-to-one--sse-experiment/build
+
+build all: phony SSE
+
+# =============================================================================
+# Built-in targets
+
+
+#############################################
+# Re-run CMake if any of its inputs changed.
+
+build build.ninja: RERUN_CMAKE | /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCXXInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeGenericSystem.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeInitializeConfigs.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeLanguageInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/GNU.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin-Initialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake CMakeLists.txt
+  pool = console
+
+
+#############################################
+# A missing CMake input file is not an error.
+
+build /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCXXInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeGenericSystem.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeInitializeConfigs.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeLanguageInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Compiler/GNU.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-C.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Apple-Clang.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin-Initialize.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/Darwin.cmake /opt/homebrew/Cellar/cmake/3.23.2/share/cmake/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake CMakeLists.txt: phony
+
+
+#############################################
+# Clean all the built files.
+
+build clean: CLEAN
+
+
+#############################################
+# Print all primary targets available.
+
+build help: HELP
+
+
+#############################################
+# Make the all target the default.
+
+default all

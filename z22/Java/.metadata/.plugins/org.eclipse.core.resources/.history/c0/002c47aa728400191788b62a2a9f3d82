@@ -1,0 +1,53 @@
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Arrays;
+
+public class test {
+	
+	public static void main(String[] args) {
+			
+		String s = "01111111";
+		
+		byte[] b = s.getBytes();
+		byte[] c = s.getBytes();
+		byte[] result = new byte[b.length];
+		
+		for(int i = 0; i < b.length; i++)
+			result[i] = (byte) (b[i] ^c[i]);
+		
+		for(int i = 0; i < b.length; i++)
+			
+			c[i] = (byte) (b[i] ^result[i]);
+		
+		System.out.println(Arrays.toString(result));
+		System.out.println(Arrays.toString(c));
+		
+		System.out.println(Integer.toBinaryString(122));
+		
+	}
+	
+	
+	
+	byte[] k_w = new byte[(int) (Math.ceil(updateID.length()*1.0/8) + 9)];
+	
+	byte[] updateKeywordByte = util.binStrToByteArr(updateID);
+	System.arraycopy(updateKeywordByte, 0, k_w, 0, updateKeywordByte.length);
+	
+	byte[] FileCntByte = util.intToByteArray(FileCnt.get(updateKeyword));
+	System.arraycopy(FileCntByte, 0, k_w, updateKeywordByte.length, FileCntByte.length);
+	
+	byte[] srcCntByte = util.intToByteArray(SrcCnt.get(updateKeyword));
+	System.arraycopy(srcCntByte, 0, k_w, updateKeywordByte.length + FileCntByte.length, srcCntByte.length);
+	
+	k_w[k_w.length - 1] = Integer.valueOf("0", 2).byteValue();
+	byte[] addr = AES.Encrytor(k_w.toString(), AESKey);
+
+	k_w[k_w.length - 1] = Integer.valueOf("1", 2).byteValue();
+	byte[] value = AES.Encrytor(k_w.toString(), AESKey);
+
+}

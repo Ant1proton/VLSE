@@ -1,0 +1,87 @@
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+public class Main {
+
+	public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		Random random = new Random();
+		int AES_KEY_SIZE = 128;
+		SecretKey AESKey = AES.keyGeneration(AES_KEY_SIZE);
+		
+		int keywordsNum = 50;
+//		int[] fileNum = {100, 1000, 10000, 100000};
+//		int[] fileNum = {100000};
+		
+		String[] keywords = Data.keywordsGenerate(keywordsNum);
+//		int[] kSet = {10, 20, 30};
+		int[] kSet = {1};
+		
+		double[][] searchTime = new double[kSet.length][fileNum.length];
+		double[][] updateTime = new double[kSet.length][fileNum.length];
+		
+		for(int q = 0; q < kSet.length; q++) {
+			
+			int k = kSet[q];
+			
+			for(int i = 0; i < fileNum.length; i++) {
+				
+				String[] identities = Data.idsGenerate(fileNum[i]);
+				
+				int idLength = (int) Math.ceil(Math.log(fileNum[i])*1.0/Math.log(2));
+							
+				SSE3 sse = new SSE3(keywords, idLength, fileNum[i], AES_KEY_SIZE, AESKey);
+							
+				Map<String, byte[]> DictW = sse.setup();
+				
+				String updateKeyword = keywords[random.nextInt(keywordsNum)];
+				System.out.println("updateKeyword:" + updateKeyword);
+				
+				double Time1 = 0.0;
+				double Time2 = 0.0;
+				
+				for(int j = 0; j < 1; j++) {
+					
+					// running time of insertion
+					double t1 = System.currentTimeMillis();
+					System.out.println("insertion identiy:" + identities[j]);
+					DictW = sse.updateProcess(updateKeyword, k, identities[j], 1, DictW);
+					Time1 = Time1 + System.currentTimeMillis() - t1;
+					
+					// running time of search
+					String searchKeyword = updateKeyword;
+					t1 = System.currentTimeMillis();
+					DictW = sse.searchProcess(searchKeyword, k, DictW);
+					Time2 = Time2 + System.currentTimeMillis() - t1;
+					
+				}	
+				
+				updateTime[q][i] = Time1/100;
+				searchTime[q][i] = Time2/100;
+				
+				System.out.println("k =" + k + ",fileNum = " + fileNum[i] + ";search time:" + searchTime[q][i] + ";update time:" + updateTime[q][i]);
+			}
+		}
+		
+//		for(int i = 0; i < kSet.length; i++) {
+//			for(int j = 0; j < fileNum.length; j++) {
+//				
+//				searchTime[i][j] = searchTime[i][j]/100;
+//				updateTime[i][j] = updateTime[i][j]/100;
+//				System.out.println("search time:" + searchTime[i][j] + ";update time:" + updateTime[i][j]);
+//				
+//			}
+//		}
+	
+	}
+}
+

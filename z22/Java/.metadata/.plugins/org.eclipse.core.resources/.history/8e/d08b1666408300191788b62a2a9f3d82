@@ -1,0 +1,251 @@
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+public class SSE {
+	
+	
+	public String[] keywords;
+	public int fileNum;
+	public int idLength;
+	public Map<String, Integer> idNum = new HashMap<String, Integer>();
+	public int AES_KEY_SIZE;
+	
+	
+	private SecretKey AESKey;
+	private Map<String, Integer> FileCnt = new HashMap<String, Integer>();
+	private List<String> randomKeywords = new ArrayList<String>();
+	
+	
+	public SSE(String[] keywords, int idLength, int fileNum, int AES_KEY_SIZE, SecretKey AESKey) {
+		
+		this.keywords = keywords;
+		this.idLength = idLength;
+		this.fileNum = fileNum;
+		this.AES_KEY_SIZE = AES_KEY_SIZE;
+		this.AESKey = AESKey;
+	}
+
+	public Map<String, BigInteger> setup() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		
+		Map<String, BigInteger> DictW = new HashMap<String, BigInteger>();
+
+		StringBuilder strBuilder = new StringBuilder("");
+		
+		String dumID = util.randomID(idLength);
+		
+		for(int j = 0; j < fileNum; j++) {
+			strBuilder.append(dumID);
+		}
+		
+		String IDs = strBuilder.toString();
+		
+		for(int i = 0; i < keywords.length; i++) {
+			
+			// Initialize the map FileCnt
+			FileCnt.put(keywords[i], 0);
+			idNum.put(keywords[i], 0);
+			
+			// generate the key for PRF
+			String k_w = keywords[i] + String.format("%0"+(AES_KEY_SIZE-keywords[i].length()-1) +"d", 0);
+			
+			byte[] addr = AES.Encrytor(k_w + "0", AESKey);	
+			byte[] seed = AES.Encrytor(k_w + "1", AESKey);
+			
+			// generate the key for PRG
+			BigInteger value_k = new BigInteger(fileNum*idLength, 64, new SecureRandom(seed));
+			
+			// encrypt with the Xor function
+			BigInteger value = value_k.xor(new BigInteger(IDs,2));
+			
+			DictW.put(Arrays.toString(addr), value);
+		
+		}
+		
+		
+		return DictW;
+		
+	}
+	
+	public List<String> C2SRequest(String requestKeyword, int k) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		randomKeywords = util.randomKeywords(keywords, requestKeyword, k);
+		
+		List<String> locList = new ArrayList<String>();
+		
+		for(int i = 0; i < k; i++) {
+			
+			String k_w = randomKeywords.get(i) + String.format("%0"+(AES_KEY_SIZE-randomKeywords.get(i).length()-5) +"d", 0) + 
+					String.format("%04d", FileCnt.get(randomKeywords.get(i)));
+			
+			byte[] addr = AES.Encrytor(k_w + "0", AESKey);	
+			locList.add(Arrays.toString(addr));			
+		}
+		
+		return locList;
+	}
+	
+	public BigInteger[] S2CResponse(List<String> locList, Map<String, BigInteger> DictW) {
+				
+		
+		BigInteger[] ValList = new BigInteger[locList.size()];
+		for(int i = 0; i < ValList.length; i++) {
+			String key = locList.get(i);
+			ValList[i] = DictW.get(key);
+		}
+		
+		return ValList;
+	}
+	
+	
+	public Map<String, BigInteger> C2SReencrypt(String[] IDList, Map<String, BigInteger> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		for(int i = 0; i < randomKeywords.size(); i++) {			
+			
+			int tempNum = FileCnt.get(randomKeywords.get(i));
+			tempNum = tempNum + 1;
+			FileCnt.put(randomKeywords.get(i), tempNum);
+			
+			String k_w = randomKeywords.get(i) + String.format("%0"+(AES_KEY_SIZE-randomKeywords.get(i).length()-5) +"d", 0) + 
+					String.format("%04d", FileCnt.get(randomKeywords.get(i)));
+			
+			byte[] addr = AES.Encrytor(k_w + "0", AESKey);
+			byte[] seed = AES.Encrytor(k_w + "1", AESKey);
+			
+			// generate the key for PRG
+			BigInteger value_k = new BigInteger(fileNum*idLength, new SecureRandom(seed));
+			BigInteger value = value_k.xor(new BigInteger(IDList[i], 2));
+			
+			DictW.put(Arrays.toString(addr), value);
+			
+		}
+		
+		return DictW;
+	}
+	
+	public Map<String, BigInteger> searchProcess(String searchKeyword, int k, Map<String, BigInteger> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		List<String> locList = C2SRequest(searchKeyword, k);
+		BigInteger[] ValList = S2CResponse(locList, DictW);
+	
+		String[] IDList = new String[ValList.length];
+		for(int i = 0; i < randomKeywords.size(); i++) {
+			
+			BigInteger value = ValList[i];
+			String k_w = randomKeywords.get(i) + String.format("%0"+(AES_KEY_SIZE-randomKeywords.get(i).length()-5) +"d", 0) + 
+					String.format("%04d", FileCnt.get(randomKeywords.get(i)));
+			byte[] seed = AES.Encrytor(k_w + "1", AESKey);
+			
+			// generate the key for PRG
+			BigInteger value_k = new BigInteger(fileNum*idLength, new SecureRandom(seed));
+			
+			String IDs = value.xor(value_k).toString(2);
+			
+			if(IDs.length() != fileNum*idLength) {
+				
+				IDs = String.format("%0"+(fileNum*idLength - IDs.length()) +"d", 0) + IDs;
+			}
+
+			
+//			for(int j = 0; j < idNum.get(randomKeywords.get(i)); j++) {
+//				
+//				System.out.println("the " + (j+1) + " identity is " + IDs.substring(j*idLength, (j+1)*idLength));
+//			}
+			
+			IDList[i] = IDs;			
+		}
+		
+		DictW = C2SReencrypt(IDList, DictW);
+		return DictW;
+	}
+	
+	public Map<String, BigInteger> updateProcess(String updateKeyword, int k, String updateID, int op, Map<String, BigInteger> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+
+		List<String> locList = C2SRequest(updateKeyword, k);
+		BigInteger[] ValList = S2CResponse(locList, DictW);
+
+		
+		String[] IDList = new String[ValList.length];
+		
+		for(int i = 0; i < randomKeywords.size(); i++) {
+			
+			BigInteger value = ValList[i];
+			
+			String k_w = randomKeywords.get(i) + String.format("%0"+(AES_KEY_SIZE-randomKeywords.get(i).length()-5) +"d", 0) + 
+					String.format("%04d", FileCnt.get(randomKeywords.get(i)));
+			byte[] seed = AES.Encrytor(k_w + "1", AESKey);
+			
+			// generate the key for PRG
+			BigInteger value_k = new BigInteger(fileNum*idLength, new SecureRandom(seed));
+			
+			String tempID = "";
+			String IDs = value.xor(value_k).toString(2);
+			
+			
+			if(IDs.length() != fileNum*idLength) {
+				
+				IDs = String.format("%0"+(fileNum*idLength - IDs.length()) +"d", 0) + IDs;
+			}
+			
+			char[] IDsArray = IDs.toCharArray();
+			
+			
+			
+			if(randomKeywords.get(i).compareTo(updateKeyword) == 0) {
+				
+				if(op == 0) {
+					
+					for(int j = 0; j < idNum.get(updateKeyword); j++) {
+						
+						if(IDs.subSequence(j*idLength, (j+1)*idLength) == updateID) {
+							
+							tempID = tempID + IDs.subSequence((j+1)*idLength, idNum.get(updateKeyword)*idLength);
+							break;
+						}
+						tempID = tempID + IDs.subSequence(j*idLength, (j+1)*idLength);
+					}
+					
+					String dumID = util.randomID(idLength);
+					IDs = tempID + dumID;
+					
+					int tempIdNum = idNum.get(updateKeyword) - 1;
+					idNum.put(updateKeyword, tempIdNum);
+					
+				} else if(op == 1) {
+					
+					int loc = idNum.get(updateKeyword);
+					for(int j = 0; j < idLength; j++) {		
+						
+						IDsArray[loc*idLength + j] = updateID.charAt(j);
+					}
+					
+					IDs = String.copyValueOf(IDsArray);
+					
+					int tempIdNum = idNum.get(updateKeyword) + 1;
+					idNum.put(updateKeyword, tempIdNum);					
+				}
+			}
+			
+			IDList[i] = IDs;			
+		}
+		
+		DictW = C2SReencrypt(IDList, DictW);
+		return DictW;
+		
+	}
+	
+
+}

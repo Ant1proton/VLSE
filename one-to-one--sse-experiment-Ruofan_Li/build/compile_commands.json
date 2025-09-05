@@ -1,0 +1,77 @@
+[
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/main.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/main.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/main.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/convert.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/convert.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/convert.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/eccbaseop.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/eccbaseop.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/eccbaseop.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/prf.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/prf.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/prf.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/random.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/random.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/random.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm2.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm2.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm2.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm3.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm3.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm3.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm4.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm4.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/crypto/sm4.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/util.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/util.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/util.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/store_file.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/store_file.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/store_file.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/edb.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/edb.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/edb.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/tool.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/tool.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/tool.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/system.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/system.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/edb/system.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build",
+  "command": "/usr/bin/clang++ -I/usr/local/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/build/../include -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/SSE.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi/psi.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi/psi.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/psi/psi.cpp"
+}
+]

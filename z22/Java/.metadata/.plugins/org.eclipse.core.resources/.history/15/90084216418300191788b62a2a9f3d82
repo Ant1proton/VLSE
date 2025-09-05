@@ -1,0 +1,296 @@
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+public class SSE2 {
+	
+	
+	public String[] keywords;
+	public int fileNum;
+	public int idLength;
+	public Map<String, Integer> idNum = new HashMap<String, Integer>();
+	public int AES_KEY_SIZE;
+	
+	
+	private SecretKey AESKey;
+	private Map<String, Integer> FileCnt = new HashMap<String, Integer>();
+	private List<String> randomKeywords = new ArrayList<String>();
+	
+	
+	public SSE2(String[] keywords, int idLength, int fileNum, int AES_KEY_SIZE, SecretKey AESKey) {
+		
+		this.keywords = keywords;
+		this.idLength = idLength;
+		this.fileNum = fileNum;
+		this.AES_KEY_SIZE = AES_KEY_SIZE;
+		this.AESKey = AESKey;
+	}
+
+	public Map<String, String> setup() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		Map<String, String> DictW = new HashMap<String, String>();		
+		
+		for(int i = 0; i < keywords.length; i++) {
+			
+			// Initialize the map FileCnt
+			FileCnt.put(keywords[i], 0);
+			idNum.put(keywords[i], 0);
+		}
+		
+		return DictW;
+		
+	}
+	
+	public List<String> C2SRequest(String requestKeyword, int k) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		randomKeywords = util.randomKeywords(keywords, requestKeyword, k);
+		
+		List<String> locList = new ArrayList<String>();
+		
+		for(int i = 0; i < k; i++) {
+			
+			String k_w = randomKeywords.get(i) + String.format("%0"+(AES_KEY_SIZE-randomKeywords.get(i).length()-5) +"d", 0) + 
+					String.format("%04d", FileCnt.get(randomKeywords.get(i)));
+			
+			byte[] addr = AES.Encrytor(k_w + "0", AESKey);	
+			locList.add(Arrays.toString(addr));			
+		}
+		
+		return locList;
+	}
+	
+	public String[] S2CResponse(List<String> locList, Map<String, String> DictW) {
+				
+		
+		String[] ValList = new String[locList.size()];
+		for(int i = 0; i < ValList.length; i++) {
+			String key = locList.get(i);
+			ValList[i] = DictW.get(key);
+		}
+		
+		return ValList;
+	}
+	
+	
+	public Map<String, String> C2SReencrypt(String[] IDList, Map<String, String> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		
+		
+		for(int i = 0; i < randomKeywords.size(); i++) {			
+			
+			
+			String keyword = randomKeywords.get(i);
+			int keywordLength = keyword.length();
+			
+			// FileCnt[keyword] ++
+			FileCnt.put(keyword, FileCnt.get(keyword) + 1);
+			
+			String k_w = keyword + String.format("%0"+(AES_KEY_SIZE- keywordLength -5) +"d", 0) + 
+					String.format("%04d", FileCnt.get(keyword));
+			
+			byte[] addr = AES.Encrytor(k_w + "0", AESKey);
+			byte[] value = AES.Encrytor(k_w + "1", AESKey);
+			
+			
+			String strCipher = null;
+			if(IDList[i].compareTo("") != 0) {
+				
+				// generate the key for PRG
+				int IDListLength = IDList[i].length();
+				SecureRandom 
+				
+				BigInteger xor_key = new BigInteger(IDListLength, new SecureRandom(value));
+				
+				System.out.println("xor_key:" + xor_key);
+				
+				BigInteger cipher1 = xor_key.xor(new BigInteger(IDList[i], 2));
+				
+				String strCipher1 = cipher1.toString(2);
+				
+				
+				if(IDListLength != strCipher1.length())
+					strCipher1 = String.format("%0" + (IDListLength - strCipher1.length()) + "d", 0) + strCipher1;
+
+				
+				
+				SecureRandom secureRandom = new SecureRandom(value);
+				
+				
+				BigInteger cipher2 = new BigInteger(fileNum*idLength - IDListLength, 64, secureRandom);
+				
+				System.out.println("cipher2" + cipher2);
+				
+				double t1 = System.currentTimeMillis();
+				
+				byte[] byteCipher2 = cipher2.toByteArray();
+				
+				String strCipher2 = cipher2.toString(2);
+				System.out.println("prepare time" + (System.currentTimeMillis() - t1));
+				
+				if(strCipher2.length() != fileNum*idLength - IDListLength) 
+					strCipher2 = String.format("%0" + (fileNum*idLength - IDListLength - strCipher2.length()) + "d", 0) + strCipher2;
+				
+				
+//				String strCipher2 = util.generateRandom(secureRandom, fileNum*idLength - IDListLength);
+				
+				
+				
+				strCipher = strCipher1 + strCipher2;
+				
+				
+				
+			} else {
+				
+				BigInteger cipher = new BigInteger(fileNum*idLength, new SecureRandom(value));
+				strCipher = cipher.toString(2);
+				if(strCipher.length() != fileNum*idLength) 
+					strCipher = String.format("%0" + (fileNum*idLength - strCipher.length()) + "d", 0) + strCipher;
+			}
+			
+			DictW.put(Arrays.toString(addr), strCipher);
+			
+			
+		}
+		
+		
+		
+		return DictW;
+	}
+	
+	public Map<String, String> searchProcess(String searchKeyword, int k, Map<String, String> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		
+		List<String> locList = C2SRequest(searchKeyword, k);
+		String[] ValList = S2CResponse(locList, DictW);
+	
+		String[] IDList = new String[ValList.length];
+		for(int i = 0; i < randomKeywords.size(); i++) {
+			
+			String keyword = randomKeywords.get(i);
+			int keywordLength = keyword.length();
+			
+			String strIDs = "";
+			if(ValList[i] != null && idNum.get(keyword) > 0) {
+				String k_w = keyword + String.format("%0"+(AES_KEY_SIZE - keywordLength -5) +"d", 0) + 
+						String.format("%04d", FileCnt.get(keyword));
+				
+				byte[] value = AES.Encrytor(k_w + "1", AESKey);
+				
+				int IDsLength = idNum.get(keyword)*idLength;
+				
+				// generate the key for PRG
+				BigInteger xor_key = new BigInteger(IDsLength, new SecureRandom(value));
+				
+//				System.out.println("search Valist:" + ValList[i]);
+//				System.out.println("search IDsLength:" + IDsLength);
+//				System.out.println("search number:" + ValList[i].substring(0, IDsLength));
+
+				BigInteger cipher1 = new BigInteger(ValList[i].substring(0, IDsLength), 2);
+				
+				BigInteger IDs = cipher1.xor(xor_key);
+				strIDs = IDs.toString(2);
+				
+				if(strIDs.length() != IDsLength)
+					strIDs = String.format("%0" + (IDsLength - strIDs.length()) + "d", 0) + strIDs;
+				
+//				if(keyword.compareTo(searchKeyword) == 0) {
+//					System.out.print("searched identities:");
+//					for(int j = 0; j < idNum.get(searchKeyword); j++) 
+//						System.out.print(strIDs.substring(j*idLength, (j+1)*idLength) + ",");	
+//				}
+			}
+			
+			IDList[i] = strIDs;			
+		}
+		
+		DictW = C2SReencrypt(IDList, DictW);
+		return DictW;
+	}
+	
+	public Map<String, String> updateProcess(String updateKeyword, int k, String updateID, int op, Map<String, String> DictW) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+
+		List<String> locList = C2SRequest(updateKeyword, k);
+		String[] ValList = S2CResponse(locList, DictW);
+
+		
+		String[] IDList = new String[ValList.length];
+		
+		for(int i = 0; i < randomKeywords.size(); i++) {
+			
+			String keyword = randomKeywords.get(i);
+			int keywordLength = keyword.length();
+			
+			String strIDs = "";
+			if(ValList[i] != null && idNum.get(keyword) > 0) {
+				String k_w = keyword + String.format("%0"+(AES_KEY_SIZE - keyword.length()-5) +"d", 0) + 
+						String.format("%04d", FileCnt.get(keyword));
+				
+				
+				byte[] value = AES.Encrytor(k_w + "1", AESKey);
+				
+				int IDsLength = idNum.get(keyword)*idLength;
+				
+				// generate the key for PRG
+				BigInteger xor_key = new BigInteger(IDsLength, new SecureRandom(value));
+				
+				BigInteger cipher1 = new BigInteger(ValList[i].substring(0, IDsLength), 2);
+				
+				BigInteger IDs = cipher1.xor(xor_key);
+				strIDs = IDs.toString(2);
+				
+				if(strIDs.length() != IDsLength) 				
+					strIDs = String.format("%0" + (IDsLength - strIDs.length()) + "d", 0) + strIDs;
+			}
+			
+			StringBuffer strBuffer = new StringBuffer();
+			strBuffer.append(strIDs);
+			
+			int maxNum = idNum.get(updateKeyword);
+			
+			if(keyword.compareTo(updateKeyword) == 0) {
+				
+				if(op == 0) {
+					
+					for(int j = 0; j < maxNum; j++) {
+						
+						if(strIDs.substring(j*idLength, (j+1)*idLength) == updateID) {
+							
+							strBuffer = strBuffer.delete(j*idLength, (j+1)*idLength);
+							break;
+						}
+					}
+					
+					idNum.put(updateKeyword, idNum.get(updateKeyword) - 1);
+					
+				} else if(op == 1) {
+					
+					strBuffer = strBuffer.append(updateID);
+					idNum.put(updateKeyword, idNum.get(updateKeyword) + 1);					
+				}
+			}
+			
+			strIDs = new String(strBuffer);
+			IDList[i] = strIDs;			
+		}
+		
+		
+		DictW = C2SReencrypt(IDList, DictW);
+		
+		
+		return DictW;
+		
+	}
+	
+
+}

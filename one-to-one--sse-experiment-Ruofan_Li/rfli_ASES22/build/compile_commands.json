@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build",
+  "command": "/usr/bin/clang++ -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/main.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/main.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/main.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build",
+  "command": "/usr/bin/clang++ -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/BCP.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/BCP.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/BCP.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build",
+  "command": "/usr/bin/clang++ -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/ASES22.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/ASES22.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/src/ASES22.cpp"
+},
+{
+  "directory": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build",
+  "command": "/usr/bin/clang++ -I/opt/homebrew/Cellar/gmp/6.2.1_1/include -I/opt/homebrew/Cellar/ntl/11.5.1/include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../include -I/Users/rfli/Desktop/Code/one-to-one--sse-experiment/rfli_ASES22/build/../../include  -g -O2 -Wall -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=gnu++11 -o CMakeFiles/main.dir/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp.o -c /Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp",
+  "file": "/Users/rfli/Desktop/Code/one-to-one--sse-experiment/util/database.cpp"
+}
+]
