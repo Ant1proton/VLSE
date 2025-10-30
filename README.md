@@ -5,7 +5,7 @@
 - **OpenSSL** 库
 - **Crypto++** 库  
 - **NTL** (Number Theory Library) 库
-
+- **Xcode** 15.3
 ### 安装依赖 (macOS)
 
 ```bash
@@ -28,8 +28,8 @@ sudo apt-get install cmake build-essential libssl-dev libcrypto++-dev libntl-dev
 ### 1. 克隆项目
 
 ```bash
-git clone <repository-url>
-cd VLSE_离散对数正确+43bit
+git clone git@github.com:Ant1proton/VLSE.git
+cd VLSE
 ```
 
 ### 2. 编译项目
@@ -37,7 +37,7 @@ cd VLSE_离散对数正确+43bit
 ```bash
 rm -rf CMakeCache.txt CMakeFiles && CC=/usr/bin/clang CXX=/usr/bin/clang++ /opt/homebrew/bin/cmake . && make -j2
 ```
- ./main_triple
+
 ### 3. 准备数据
 
 确保`data/`目录中有测试数据文件：
@@ -53,14 +53,4 @@ ls -la data/data14
 # 运行主程序
 ./main_triple
 
-# 或使用脚本运行（带参数）
-./run.sh
-```
-
-
-### 运行测试
-
-```bash
-# 编译测试程序
-make test_triple_vf
 
