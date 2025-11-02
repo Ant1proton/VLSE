@@ -576,7 +576,7 @@ void RunTest(int labels_per_id) {
     //cout << "Buffer size: " << fixed << setprecision(2)
     // << (double)(dvf.GetBufferCapacity() * sizeof(__uint128_t)) / (1024*1024) << " MB" << endl;
  
-
+/*
     // Output statistics
     cout << "\nQuery statistics:" << endl;
     cout << "Total query time: " << fixed << setprecision(3) << total_search_time << " ms" << endl;
@@ -639,6 +639,7 @@ void RunTest(int labels_per_id) {
     cout << "缓冲区使用率: " << fixed << setprecision(2)
          << (tvf.GetBufferSize() * 100.0 / tvf.GetBufferCapacity()) << "%" << endl;
     cout << "==== 全量查询验证结束 ====" << endl;
+    */
 }
 
 int main() {
