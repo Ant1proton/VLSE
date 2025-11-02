@@ -64,8 +64,7 @@ ls -la data/data14
 运行结果图
 
 
-<img width="598" height="633" alt="3fee399a3ca29e55b80d229ce8b28aa9" src="https://github.com/user-attachments/assets/79fee9ab-76c8-4c53-846c-25bd0f48a952" />
-
+<img width="598" height="633" alt="3fee399a3ca29e55b80d229ce8b28aa9" src="https://github.com/user-attachments/assets/b0c48c82-7515-44df-b32c-f98a91e039d1" />
 
 
 
