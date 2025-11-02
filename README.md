@@ -61,10 +61,13 @@ ls -la data/data14
 ```bash
 # 运行主程序
 ./main_triple
-运行结果图
+
+```
+运行结果示例图
 
 
-<img width="598" height="633" alt="3fee399a3ca29e55b80d229ce8b28aa9" src="https://github.com/user-attachments/assets/b0c48c82-7515-44df-b32c-f98a91e039d1" />
+
+<img width="598" height="633" alt="3fee399a3ca29e55b80d229ce8b28aa9" src="https://github.com/user-attachments/assets/7c2dded8-ba40-4478-aa98-ddbc76d62d57" />
 
 
 
