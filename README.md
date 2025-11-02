@@ -40,7 +40,11 @@ cd VLSE
 ```bash
 rm -rf CMakeCache.txt CMakeFiles && CC=/usr/bin/clang CXX=/usr/bin/clang++ /opt/homebrew/bin/cmake . && make -j2
 ```
+
 成功编译效果图
+
+
+
 <img width="648" height="458" alt="e69488f7a32c2016ddeb90640f3a8c53" src="https://github.com/user-attachments/assets/95fbb7e9-6fa1-4a26-81ee-94f7ae943e3f" />
 
 ### 3. 准备数据
@@ -58,6 +62,9 @@ ls -la data/data14
 # 运行主程序
 ./main_triple
 运行结果图
-<img width="598" height="633" alt="3fee399a3ca29e55b80d229ce8b28aa9" src="https://github.com/user-attachments/assets/110dd80a-e8bc-4c3e-ab8f-3ec33805764c" />
+
+
+
+<img width="598" height="633" alt="微信图片_20251102204623_4640_52" src="https://github.com/user-attachments/assets/82075405-f1b8-4f2f-bba1-55e824a117a6" />
 
 
