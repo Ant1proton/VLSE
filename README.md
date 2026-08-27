@@ -1,74 +1,52 @@
-# VLSE 
-### 依赖库
-- **CMake** >= 3.10
-- **C++14** 编译器支持
-- **OpenSSL** 库
-- **Crypto++** 库  
-- **NTL** (Number Theory Library) 库
-- **Xcode** 15.3
+# VLSE examples
 
-### 安装依赖 (macOS)
-- **Vaccum filter**-
--  Paper Link: http://www.vldb.org/pvldb/vol13/p197-wang.pdf
--  Code Link: https://github.com/wuwuz/Vacuum-Filter
+This repository contains two compact C++ implementations:
+
+- `original_vlse/`: three independent upstream Vacuum Filters (`15 + 15 + 13` bits) with a `std::map` payload table.
+- `paired_vlse/`: one 43-bit Vacuum Filter whose fingerprint and payload move as a single record.
+
+The repository is a runnable implementation example, not a benchmark package.
+
+## Requirements
+
+- CMake 3.16 or newer
+- A C++17 compiler
+- OpenSSL development files
+- Git (for the Vacuum-Filter submodule)
+
+Ubuntu/Debian:
+
 ```bash
-# 使用Homebrew安装依赖
-brew install cmake openssl cryptopp ntl
-
-# 或者使用MacPorts
-sudo port install cmake openssl cryptopp ntl
+sudo apt-get install build-essential cmake git libssl-dev
 ```
 
-### 安装依赖 (Ubuntu/Debian)
+macOS with Homebrew:
 
 ```bash
-sudo apt-get update
-sudo apt-get install cmake build-essential libssl-dev libcrypto++-dev libntl-dev
+brew install cmake openssl
 ```
 
-## 编译和运行
-
-### 1. 克隆项目
+## Build and test
 
 ```bash
-git clone git@github.com:Ant1proton/VLSE.git
+git clone --recurse-submodules https://github.com/Ant1proton/VLSE.git
 cd VLSE
+cmake -S . -B build
+cmake --build build -j
+ctest --test-dir build --output-on-failure
 ```
 
-### 2. 编译项目
+Run either example directly:
 
 ```bash
-rm -rf CMakeCache.txt CMakeFiles && CC=/usr/bin/clang CXX=/usr/bin/clang++ /opt/homebrew/bin/cmake . && make -j2
+./build/original_vlse/original_vlse_demo
+./build/paired_vlse/paired_vlse_demo
 ```
 
-成功编译效果图
-
-
-
-<img width="648" height="458" alt="e69488f7a32c2016ddeb90640f3a8c53" src="https://github.com/user-attachments/assets/95fbb7e9-6fa1-4a26-81ee-94f7ae943e3f" />
-
-### 3. 准备数据
-
-确保`data/`目录中有测试数据文件：
+If the repository was cloned without submodules, initialize the dependency with:
 
 ```bash
-# 检查数据文件
-ls -la data/data14
+git submodule update --init --recursive
 ```
 
-### 4. 运行程序
-
-```bash
-# 运行主程序
-./main_triple
-
-```
-运行结果示例图
-
-
-
-<img width="598" height="633" alt="3fee399a3ca29e55b80d229ce8b28aa9" src="https://github.com/user-attachments/assets/7c2dded8-ba40-4478-aa98-ddbc76d62d57" />
-
-
-
-
+Each implementation directory contains a short description of its layout.

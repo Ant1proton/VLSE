@@ -1,0 +1,3 @@
+[submodule "Vacuum-Filter"]
+    path = Vacuum-Filter
+    url = https://github.com/wuwuz/Vacuum-Filter.git

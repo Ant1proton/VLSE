@@ -1,1 +1,0 @@
-/usr/bin/clang++  -march=armv8-a -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names "CMakeFiles/main.dir/Vacuum-Filter/test.cpp.o" -o main  /opt/homebrew/lib/libssl.dylib /opt/homebrew/lib/libcrypto.dylib
