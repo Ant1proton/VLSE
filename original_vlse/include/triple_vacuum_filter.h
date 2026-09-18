@@ -94,6 +94,15 @@ public:
 
     size_t size() const { return payloads_.size(); }
     bool padded() const { return padded_; }
+    size_t total_filter_slots() const {
+        return static_cast<size_t>(first_.n * first_.m + second_.n * second_.m +
+                                   third_.n * third_.m);
+    }
+    size_t logical_fingerprint_bytes() const {
+        return static_cast<size_t>(first_.memory_consumption +
+                                   second_.memory_consumption +
+                                   third_.memory_consumption);
+    }
 
 private:
     template <int FingerprintBits>

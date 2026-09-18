@@ -1,94 +1,96 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
-#include <random>
-#include <set>
+#include <stdexcept>
+#include <string>
 #include <vector>
 
+#include <openssl/rand.h>
+
 #include "aead_label.h"
+#include "ntl_oprf.h"
 #include "paired_vacuum_filter.h"
+#include "protocol_derivation.h"
 
 namespace {
+constexpr std::uint64_t kEpoch = 1;
+constexpr std::uint32_t kComponent = 0;
 
-constexpr uint64_t kEpoch = 1;
-constexpr uint32_t kComponent = 0;
-
-std::vector<vlse::Token128> MakeTokens(size_t count) {
-    std::mt19937_64 random_engine(0xa4093822299f31d0ULL);
-    std::set<vlse::Token128> unique;
-    while (unique.size() < count) {
-        const vlse::Token128 token =
-            (static_cast<vlse::Token128>(random_engine()) << 64) |
-            random_engine();
-        unique.insert(token);
+std::vector<std::string> MakeKeywords(std::size_t count) {
+    std::vector<std::string> keywords;
+    keywords.reserve(count);
+    for (std::size_t i = 0; i < count; ++i) {
+        keywords.push_back("paired-demo-keyword/" + std::to_string(i));
     }
-    return std::vector<vlse::Token128>(unique.begin(), unique.end());
+    return keywords;
 }
 
-bool FindDocument(
-    const vlse::PairedVacuumFilter<43, vlse::AeadLabel>& filter,
-    const vlse::AeadKey128& key,
-    vlse::Token128 token,
-    uint64_t expected_document) {
-    const auto candidates = filter.QueryAll(token);
-    return std::any_of(
-        candidates.begin(), candidates.end(), [&](const vlse::AeadLabel& label) {
-            bool valid = false;
-            uint64_t document = 0;
-            return vlse::DecryptLabel(
-                       key, kEpoch, token, kComponent, label, &valid, &document) &&
-                   valid && document == expected_document;
-        });
+vlse::oprf::OprfOutput RandomDerivationInput() {
+    vlse::oprf::OprfOutput output{};
+    if (RAND_bytes(output.data(), output.size()) != 1) {
+        throw std::runtime_error("RAND_bytes failed");
+    }
+    return output;
 }
-
 }  // namespace
 
 int main() {
-    constexpr size_t kItems = 4096;
-    const auto tokens = MakeTokens(kItems);
-
-    vlse::AeadKey128 key{};
-    for (size_t i = 0; i < key.size(); ++i) {
-        key[i] = static_cast<uint8_t>(i * 17 + 3);
-    }
-
+    constexpr std::size_t kItems = 256;
+    const auto keywords = MakeKeywords(kItems);
+    vlse::oprf::NtlOprf oprf{vlse::oprf::SecretKey{}};
     vlse::PairedVacuumFilter<43, vlse::AeadLabel> index(kItems);
-    for (size_t i = 0; i < tokens.size(); ++i) {
+
+    for (std::size_t i = 0; i < keywords.size(); ++i) {
+        const auto derived = vlse::protocol::DeriveTokenAndKey(
+            oprf.DirectEvaluate(keywords[i]));
         const auto label = vlse::EncryptLabel(
-            key, kEpoch, tokens[i], kComponent, true, i + 1);
-        if (!index.Insert(tokens[i], label)) {
+            derived.key, kEpoch, derived.token, kComponent, true, i + 1);
+        if (!index.Insert(derived.token, label)) {
             std::cerr << "insertion failed at item " << i << '\n';
             return 1;
         }
     }
 
-    for (size_t i = 0; i < tokens.size(); ++i) {
-        if (!FindDocument(index, key, tokens[i], i + 1)) {
-            std::cerr << "lookup failed at item " << i << '\n';
+    auto blinds = oprf.PrepareBlindPool(keywords.size());
+    for (std::size_t i = 0; i < keywords.size(); ++i) {
+        const auto derived = vlse::protocol::DeriveTokenAndKey(
+            oprf.EvaluatePrepared(keywords[i], blinds[i]));
+        const auto candidates = index.QueryAll(derived.token);
+        const bool found = std::any_of(
+            candidates.begin(), candidates.end(), [&](const vlse::AeadLabel& label) {
+                bool valid = false;
+                std::uint64_t document = 0;
+                return vlse::DecryptLabel(
+                           derived.key, kEpoch, derived.token, kComponent, label,
+                           &valid, &document) &&
+                       valid && document == i + 1;
+            });
+        if (!found) {
+            std::cerr << "authenticated QueryAll failed at item " << i << '\n';
             return 1;
         }
     }
 
-    std::mt19937_64 dummy_random(0x082efa98ec4e6c89ULL);
-    const size_t dummy_records = index.FillEmptySlots(
-        [&]() { return dummy_random(); },
-        []() { return vlse::RandomDummyLabel(); },
-        [](uint64_t) { return true; });
-
-    for (size_t i = 0; i < tokens.size(); ++i) {
-        if (!FindDocument(index, key, tokens[i], i + 1)) {
-            std::cerr << "lookup after padding failed at item " << i << '\n';
-            return 1;
-        }
-    }
+    vlse::protocol::TokenKeyPair pending;
+    vlse::AeadLabel pending_label;
+    const std::size_t dummy_records = index.FillEmptySlots(
+        [&]() {
+            pending = vlse::protocol::DeriveTokenAndKey(RandomDerivationInput());
+            pending_label = vlse::EncryptLabel(
+                pending.key, kEpoch, pending.token, kComponent, false, 0);
+            return index.FingerprintForToken(pending.token);
+        },
+        [&]() { return pending_label; },
+        [](std::uint64_t) { return true; });
 
     if (!index.padded() || index.size() != index.capacity()) {
-        std::cerr << "dummy padding did not fill every slot\n";
+        std::cerr << "dummy padding did not fill every paired slot\n";
         return 1;
     }
-
     std::cout << "paired_vlse_demo: PASS\n"
-              << "genuine records: " << tokens.size() << '\n'
-              << "dummy records: " << dummy_records << '\n';
+              << "OPRF backend: " << vlse::oprf::PublicParameters::Identifier() << '\n'
+              << "TGen OPRFs/query: 1\n"
+              << "genuine AES-GCM records: " << kItems << '\n'
+              << "authenticated dummy records: " << dummy_records << '\n';
     return 0;
 }

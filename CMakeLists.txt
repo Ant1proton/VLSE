@@ -7,5 +7,7 @@ set(CMAKE_CXX_EXTENSIONS ON)
 
 enable_testing()
 
+add_subdirectory(common)
 add_subdirectory(original_vlse)
 add_subdirectory(paired_vlse)
+add_subdirectory(benchmarks)

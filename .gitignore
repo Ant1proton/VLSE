@@ -1,5 +1,6 @@
 # Out-of-tree builds and generated CMake files.
 /build*/
+/results/
 /CMakeCache.txt
 /CMakeFiles/
 /Makefile
@@ -15,6 +16,8 @@
 # macOS and editor metadata.
 .DS_Store
 .vscode/
+__pycache__/
+*.pyc
 
 # Local research workspace files are intentionally not part of this demo.
 /data/
