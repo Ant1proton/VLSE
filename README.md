@@ -25,10 +25,11 @@ fixed-width group-element encoding. The parameter file is
 
 ## Install dependencies
 
-Clone the repository and its Vacuum Filter submodule:
+Replace `REPOSITORY_URL` with the repository URL, then clone it and its
+Vacuum Filter submodule:
 
 ```bash
-git clone --recurse-submodules https://github.com/Ant1proton/VLSE.git
+git clone --recurse-submodules REPOSITORY_URL VLSE
 cd VLSE
 ```
 
@@ -113,3 +114,12 @@ Arguments:
 The program prints one machine-readable `RESULT` line containing Setup,
 dummy-padding, OPRF, lookup/decryption, object-size, communication, collision,
 relocation, rollback, and correctness counters.
+
+## Sharing experiment results
+
+The comparison runner redacts the local repository path, home directory, result
+directory, and host name from captured logs. Manifests use relative paths.
+Hardware and software versions remain available for reproducibility. Review
+external tool diagnostics and any manually added files before sharing results.
+Git history and hosting-account metadata are separate from source-file contents;
+editing the source does not anonymize an existing public repository.

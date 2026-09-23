@@ -35,6 +35,19 @@ static_assert(sizeof(AeadLabel) == 44,
 
 namespace detail {
 
+// Encode the one-based logical component position as a 96-bit nonce.
+// Callers keep using zero-based component indices for both encryption and AAD.
+inline std::array<uint8_t, AeadLabel::kNonceBytes> MakeComponentNonce(
+    uint32_t component_index) {
+    std::array<uint8_t, AeadLabel::kNonceBytes> nonce{};
+    const uint64_t position = static_cast<uint64_t>(component_index) + 1;
+    for (size_t index = 0; index < 8; ++index) {
+        nonce[nonce.size() - 1 - index] =
+            static_cast<uint8_t>((position >> (8 * index)) & 0xff);
+    }
+    return nonce;
+}
+
 inline void StoreLittleEndian64(uint64_t value, uint8_t* output) {
     for (size_t index = 0; index < 8; ++index) {
         output[index] = static_cast<uint8_t>(value >> (8 * index));
@@ -92,6 +105,9 @@ private:
 
 }  // namespace detail
 
+// Use each label key for one immutable record and encrypt each component once.
+// Generate a fresh OPRF key for each database Setup; reuse ciphertexts on layout
+// retries. Changing epoch or token does not make key/nonce reuse safe.
 inline AeadLabel EncryptLabel(
     const AeadKey128& key,
     uint64_t epoch,
@@ -100,9 +116,7 @@ inline AeadLabel EncryptLabel(
     bool valid,
     uint64_t document_identifier) {
     AeadLabel output;
-    if (RAND_bytes(output.nonce.data(), output.nonce.size()) != 1) {
-        throw std::runtime_error("RAND_bytes failed for the AES-GCM nonce");
-    }
+    output.nonce = detail::MakeComponentNonce(component_index);
 
     std::array<uint8_t, AeadLabel::kPlaintextBytes> plaintext{};
     plaintext[0] = 1;  // record-format version

@@ -20,12 +20,18 @@ if [[ -d "${result_dir}" ]] && [[ -n "$(find "${result_dir}" -mindepth 1 -maxdep
 fi
 mkdir -p "${result_dir}/logs"
 
+# Redact diagnostics as they are written, including failed build/test logs.
+redact_local_identifiers() {
+  python3 "${repo_dir}/scripts/redact_local_identifiers.py" \
+    --repo-root "${repo_dir}" --result-root "${result_dir}"
+}
+
 cmake -S "${repo_dir}" -B "${build_dir}" -DCMAKE_BUILD_TYPE=Release \
-  > "${result_dir}/configure.log" 2>&1
-cmake --build "${build_dir}" -j > "${result_dir}/build.log" 2>&1
+  2>&1 | redact_local_identifiers > "${result_dir}/configure.log"
+cmake --build "${build_dir}" -j 2>&1 | redact_local_identifiers > "${result_dir}/build.log"
 ctest --test-dir "${build_dir}" \
   -R 'oprf_consistency|paired_collision|vlse_paired_protocol_smoke|lse_protocol_smoke' \
-  --output-on-failure > "${result_dir}/ctest.log" 2>&1
+  --output-on-failure 2>&1 | redact_local_identifiers > "${result_dir}/ctest.log"
 
 environment_file="${result_dir}/environment.txt"
 raw_file="${result_dir}/raw_results.txt"
@@ -37,12 +43,12 @@ actual_cxx="$({ sed -n 's/^CMAKE_CXX_COMPILER:FILEPATH=//p' "${build_dir}/CMakeC
 {
   date -u '+utc=%Y-%m-%dT%H:%M:%SZ'
   sw_vers
-  uname -a
+  uname -srm
   sysctl -n machdep.cpu.brand_string 2>/dev/null || true
   sysctl -n hw.memsize 2>/dev/null || true
   uptime
   pmset -g therm 2>/dev/null || true
-  echo "cmake_cxx_compiler=${actual_cxx}"
+  echo "cmake_cxx_compiler=$(basename "${actual_cxx}")"
   if [[ -n "${actual_cxx}" ]]; then
     "${actual_cxx}" --version | head -n 1
   else
@@ -67,22 +73,15 @@ actual_cxx="$({ sed -n 's/^CMAKE_CXX_COMPILER:FILEPATH=//p' "${build_dir}/CMakeC
   echo "log_io_included=0"
   echo "network_delay_included=0"
   echo "cache_model=one complete object download per static database/key epoch plus per-keyword OPRF request+response"
-  if git -C "${repo_dir}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    echo "git_commit=$(git -C "${repo_dir}" rev-parse HEAD)"
-    echo "git_status_begin"
-    git -C "${repo_dir}" status --short
-    echo "git_status_end"
-  fi
-  shasum -a 256 "${repo_dir}/common/parameters/ffc3072_q256.pem"
-  shasum -a 256 \
-    "${build_dir}/benchmarks/lse_protocol_benchmark" \
-    "${build_dir}/benchmarks/vlse_protocol_benchmark"
-} > "${environment_file}"
+  (cd "${repo_dir}" && shasum -a 256 common/parameters/ffc3072_q256.pem)
+  (cd "${repo_dir}" && shasum -a 256 \
+    build-release/benchmarks/lse_protocol_benchmark \
+    build-release/benchmarks/vlse_protocol_benchmark)
+} | redact_local_identifiers > "${environment_file}"
 
-find "${repo_dir}/benchmarks" "${repo_dir}/common" "${repo_dir}/paired_vlse" \
-  "${repo_dir}/scripts" -type f \
+(cd "${repo_dir}" && find benchmarks common paired_vlse scripts -type f \
   \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' -o -name '*.sh' -o -name '*.py' -o -name '*.pem' \) \
-  -print0 | sort -z | xargs -0 shasum -a 256 > "${result_dir}/source_manifest.sha256"
+  -print0 | sort -z | xargs -0 shasum -a 256) > "${result_dir}/source_manifest.sha256"
 
 : > "${raw_file}"
 printf 'utc\tround\tn\tscheme\tstatus\n' > "${progress_file}"
@@ -134,7 +133,7 @@ run_one() {
     >> "${snapshot_file}"
   printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
     "${round}" "${n}" "${scheme}" "${seed}" "${queries}" "${dmax}" \
-    "${log_file}" >> "${manifest_file}"
+    "logs/$(basename "${log_file}")" >> "${manifest_file}"
   if [[ "${scheme}" == "LSE" ]]; then
     {
       echo "utc_start=$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
@@ -142,7 +141,7 @@ run_one() {
       caffeinate -i "${build_dir}/benchmarks/lse_protocol_benchmark" \
         --keywords "${n}" --queries "${queries}" --dmax "${dmax}" --seed "${seed}"
       echo "utc_end=$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-    } 2>&1 | tee "${log_file}"
+    } 2>&1 | redact_local_identifiers | tee "${log_file}"
   else
     {
       echo "utc_start=$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
@@ -151,7 +150,7 @@ run_one() {
         --layout paired --keywords "${n}" --queries "${queries}" \
         --dmax "${dmax}" --seed "${seed}"
       echo "utc_end=$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-    } 2>&1 | tee "${log_file}"
+    } 2>&1 | redact_local_identifiers | tee "${log_file}"
   fi
   if [[ "$(grep -c '^RESULT ' "${log_file}")" -ne 1 ]]; then
     echo "Expected exactly one RESULT line in ${log_file}" >&2
@@ -182,5 +181,5 @@ if [[ "${actual_results}" -ne "${expected_results}" ]]; then
   exit 4
 fi
 python3 "${repo_dir}/scripts/summarize_paired_vs_lse.py" "${result_dir}"
-find "${result_dir}" -type f ! -name 'artifact_manifest.sha256' -print0 \
-  | sort -z | xargs -0 shasum -a 256 > "${result_dir}/artifact_manifest.sha256"
+(cd "${result_dir}" && find . -type f ! -name 'artifact_manifest.sha256' -print0 \
+  | sort -z | xargs -0 shasum -a 256) > "${result_dir}/artifact_manifest.sha256"
