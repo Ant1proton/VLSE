@@ -11,6 +11,4 @@ ctest --test-dir "${build_dir}" --output-on-failure
 "${build_dir}/benchmarks/lse_protocol_benchmark" \
   --keywords 4096 --queries 40 --dmax 1 --seed 1
 "${build_dir}/benchmarks/vlse_protocol_benchmark" \
-  --layout original --keywords 4096 --queries 40 --dmax 1 --seed 1
-"${build_dir}/benchmarks/vlse_protocol_benchmark" \
   --layout paired --keywords 4096 --queries 40 --dmax 1 --seed 1

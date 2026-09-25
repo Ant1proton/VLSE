@@ -1,43 +1,24 @@
 # VLSE
 
-## Tested environment
-
-The current implementation was built and tested with:
-
-| Component | Version |
-|---|---|
-| Hardware | Apple M3, 16 GB RAM |
-| Operating system | macOS 15.7.3 (24G419) |
-| Language | C++17 |
-| Compiler | Homebrew LLVM/Clang 21.1.3 |
-| CMake | 4.1.2 |
-| NTL | 11.5.1 |
-| GMP | 6.3.0 |
-| Crypto++ | 8.9.0 |
-| OpenSSL | 3.6.0 |
-| Vacuum Filter | `wuwuz/Vacuum-Filter` commit `ec234bfc189af9e6180688495535c623ad352190` |
-
-The OPRF backend uses the checked-in
-`ffc3072-q256-shake256-v1` parameter set: a 3072-bit finite-field modulus,
-a 256-bit prime-order subgroup, SHAKE256-based hash-to-subgroup, and 384-byte
-fixed-width group-element encoding. The parameter file is
-`common/parameters/ffc3072_q256.pem`.
-
-## Install dependencies
-
-Replace `REPOSITORY_URL` with the repository URL, then clone it and its
-Vacuum Filter submodule:
+## Get the source
 
 ```bash
-git clone --recurse-submodules REPOSITORY_URL VLSE
+git clone --recurse-submodules https://github.com/Ant1proton/VLSE.git
 cd VLSE
 ```
 
-If the repository was cloned without `--recurse-submodules`, run:
+If the repository was cloned without its dependency:
 
 ```bash
 git submodule update --init --recursive
 ```
+
+For a source archive that includes `Vacuum-Filter/hashutil.h`, extract the archive
+and run the following commands from its `VLSE` directory.
+
+## Install dependencies
+
+A C++17 compiler, CMake, NTL, GMP, Crypto++, and OpenSSL are required.
 
 ### macOS with Homebrew
 
@@ -55,8 +36,7 @@ sudo apt-get install -y build-essential cmake git \
 
 ## Build
 
-On Apple Silicon macOS, the following command uses the same compiler family as
-the tested build:
+### Apple Silicon macOS
 
 ```bash
 cmake -S . -B build-release \
@@ -66,8 +46,7 @@ cmake -S . -B build-release \
 cmake --build build-release -j
 ```
 
-On Linux, or when the default compiler and dependency paths are already
-configured:
+### Linux
 
 ```bash
 cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
@@ -80,46 +59,53 @@ cmake --build build-release -j
 ctest --test-dir build-release --output-on-failure
 ```
 
-The test suite contains the OPRF consistency test, the original and paired
-VLSE examples, the paired collision test, and protocol smoke tests.
+## Run VLSE
 
-## Run the latest paired VLSE implementation
-
-Run the small end-to-end example:
+Run the example:
 
 ```bash
 ./build-release/paired_vlse/paired_vlse_demo
 ```
 
-Run the configurable VLSE protocol driver:
+Run a configurable experiment:
 
 ```bash
 ./build-release/benchmarks/vlse_protocol_benchmark \
-  --layout paired \
-  --keywords 4096 \
-  --queries 1000 \
-  --dmax 1 \
-  --seed 1
+  --keywords 16384 --queries 1000 --dmax 1 --seed 1
 ```
 
-Arguments:
+| Argument | Meaning |
+|---|---|
+| `--keywords N` | Number of keyword records; positive integer. |
+| `--queries Q` | Number of member queries; positive integer no greater than `N`. |
+| `--dmax D` | Label capacity per record: `1`, `5`, `10`, `15`, or `20`. Use `1` for a single label. |
+| `--seed S` | Nonzero seed for the generated workload and filter layout. |
 
-- `--keywords N`: number of keyword records.
-- `--queries Q`: number of member queries; `Q` must not exceed `N`.
-- `--dmax D`: fixed label-list capacity; supported values are
-  `1`, `5`, `10`, `15`, and `20`.
-- `--seed S`: nonzero reproducibility seed.
-- `--layout paired`: selects the latest 43-bit paired Vacuum Filter path.
+The program builds and pads the database, then checks the query results. It prints
+one `RESULT` line containing timings, object size, communication counts, and
+correctness counters.
 
-The program prints one machine-readable `RESULT` line containing Setup,
-dummy-padding, OPRF, lookup/decryption, object-size, communication, collision,
-relocation, rollback, and correctness counters.
+## Run the VLSE/LSE comparison
 
-## Sharing experiment results
+The batch script requires macOS. From the repository root:
 
-The comparison runner redacts the local repository path, home directory, result
-directory, and host name from captured logs. Manifests use relative paths.
-Hardware and software versions remain available for reproducibility. Review
-external tool diagnostics and any manually added files before sharing results.
-Git history and hosting-account metadata are separate from source-file contents;
-editing the source does not anonymize an existing public repository.
+```bash
+bash scripts/run_paired_vs_lse.sh results/paired_vs_lse
+```
+
+The default run uses 16,384, 32,768, 65,536, 131,072, and 262,144 keyword records,
+three rounds per size, 1,000 queries per round, and one label per record. Choose a
+new or empty output directory for each experiment.
+
+For a smaller run:
+
+```bash
+VLSE_COMPARE_SIZES="1024" \
+VLSE_COMPARE_ROUNDS=1 \
+VLSE_COMPARE_QUERIES=1000 \
+bash scripts/run_paired_vs_lse.sh results/small_run
+```
+
+The script writes individual logs under `logs/` and creates `raw_results.csv`,
+`summary.csv`, `query_checkpoints.csv`, and `communication_points.csv` in the
+selected output directory.

@@ -20,3 +20,11 @@ target_include_directories(paired_collision_test PRIVATE
     ${PROJECT_SOURCE_DIR}/Vacuum-Filter)
 target_link_libraries(paired_collision_test PRIVATE OpenSSL::Crypto)
 add_test(NAME paired_collision_test COMMAND paired_collision_test)
+
+add_executable(protocol_contract_test protocol_contract_test.cpp)
+target_include_directories(protocol_contract_test PRIVATE
+    ${PROJECT_SOURCE_DIR}/paired_vlse/include
+    ${PROJECT_SOURCE_DIR}/common/include
+    ${PROJECT_SOURCE_DIR}/Vacuum-Filter)
+target_link_libraries(protocol_contract_test PRIVATE vlse_ntl_oprf OpenSSL::Crypto)
+add_test(NAME protocol_contract_test COMMAND protocol_contract_test)

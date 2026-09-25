@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replace only VLSE/LSE measurements in the legacy-style paper data files.
+"""Replace only VLSE/LSE measurements in the paper data files.
 
 Zheng et al., Wang et al., protocol labels, and plotting style are untouched.
 The main per-keyword communication value is (S + s*c) / s with s=1000.

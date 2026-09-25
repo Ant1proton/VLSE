@@ -22,7 +22,6 @@
 #include "paired_vacuum_filter.h"
 #include "protocol_derivation.h"
 #include "protocol_record.h"
-#include "triple_vacuum_filter.h"
 
 namespace {
 
@@ -36,7 +35,6 @@ constexpr std::array<std::size_t, 5> kQueryCheckpoints{
     200, 400, 600, 800, 1000};
 
 struct Options {
-    std::string layout = "paired";
     std::size_t keywords = 4096;
     std::size_t queries = 40;
     std::size_t dmax = 1;
@@ -63,7 +61,9 @@ Options ParseOptions(int argc, char** argv) {
             return argv[++i];
         };
         if (argument == "--layout") {
-            options.layout = consume("--layout");
+            if (std::string_view(consume("--layout")) != "paired") {
+                throw std::invalid_argument("--layout supports only paired");
+            }
         } else if (argument == "--keywords") {
             options.keywords = ParseSize(consume("--keywords"), "--keywords");
         } else if (argument == "--queries") {
@@ -73,16 +73,13 @@ Options ParseOptions(int argc, char** argv) {
         } else if (argument == "--seed") {
             options.seed = ParseSize(consume("--seed"), "--seed");
         } else if (argument == "--help") {
-            std::cout << "Usage: vlse_protocol_benchmark [--layout original|paired] "
+            std::cout << "Usage: vlse_protocol_benchmark [--layout paired] "
                          "[--keywords N] [--queries Q] [--dmax 1|5|10|15|20] "
                          "[--seed S]\n";
             std::exit(0);
         } else {
             throw std::invalid_argument("unknown option: " + argument);
         }
-    }
-    if (options.layout != "original" && options.layout != "paired") {
-        throw std::invalid_argument("--layout must be original or paired");
     }
     if (options.queries > options.keywords) {
         throw std::invalid_argument("queries cannot exceed keywords");
@@ -348,95 +345,13 @@ Metrics RunPaired(const Options& options) {
     return metrics;
 }
 
-template <std::size_t DMax>
-Metrics RunOriginal(const Options& options) {
-    const std::uint64_t epoch = options.seed;
-    const auto keywords = MakeKeywords(options.keywords, options.seed);
-    NtlOprf oprf{SecretKey{}};
-    using Record = vlse::protocol::AeadRecord<DMax>;
-
-    const auto pre_start = Clock::now();
-    auto blind_pool = oprf.PrepareBlindPool(options.queries);
-    const auto pre_end = Clock::now();
-
-    const auto setup_start = Clock::now();
-    // This keeps the repository's historical three-filter wrapper and map.
-    // It is a legacy implementation comparator, not the revised paired scheme.
-    vlse_original::TripleVacuumFilter<Record> index(options.keywords * 2);
-    for (std::size_t i = 0; i < keywords.size(); ++i) {
-        const TokenKeyPair derived = vlse::protocol::DeriveTokenAndKey(
-            oprf.DirectEvaluate(keywords[i]));
-        const Record record = MakeRecord<DMax>(derived, epoch, i * DMax + 1, true);
-        if (!index.Insert(derived.token, record)) {
-            throw std::runtime_error("original insertion failed at item " +
-                                     std::to_string(i));
-        }
-    }
-    const auto genuine_end = Clock::now();
-    const std::size_t dummies = index.FillEmptySlots(options.seed);
-    const auto setup_end = Clock::now();
-
-    double tgen_ms = 0;
-    double search_ms = 0;
-    std::uint64_t query_successes = 0;
-    std::uint64_t decrypt_component_attempts = 0;
-    for (std::size_t i = 0; i < options.queries; ++i) {
-        const auto tgen_start = Clock::now();
-        const TokenKeyPair derived = vlse::protocol::DeriveTokenAndKey(
-            oprf.EvaluatePrepared(keywords[i], blind_pool[i]));
-        const auto tgen_end = Clock::now();
-
-        const auto search_start = Clock::now();
-        const Record* record = index.Find(derived.token);
-        const bool found = record != nullptr && DecryptExpected<DMax>(
-            *record,
-            derived,
-            epoch,
-            i * DMax + 1,
-            &decrypt_component_attempts);
-        const auto search_end = Clock::now();
-        if (!found) {
-            throw std::runtime_error("original authenticated lookup failed");
-        }
-        ++query_successes;
-        tgen_ms += Milliseconds(tgen_end - tgen_start);
-        search_ms += Milliseconds(search_end - search_start);
-    }
-
-    Metrics metrics;
-    metrics.blind_precomputation_ms = Milliseconds(pre_end - pre_start);
-    metrics.setup_ms = Milliseconds(setup_end - setup_start);
-    metrics.setup_genuine_ms = Milliseconds(genuine_end - setup_start);
-    metrics.setup_dummy_ms = Milliseconds(setup_end - genuine_end);
-    metrics.tgen_ms = tgen_ms;
-    metrics.search_decrypt_ms = search_ms;
-    metrics.serialized_bytes = index.logical_fingerprint_bytes() +
-        options.keywords * (16 + vlse::protocol::SerializedRecordBytes<DMax>());
-    metrics.communication_bytes = metrics.serialized_bytes +
-        options.queries * NtlOprf::CommunicationBytesPerEvaluation();
-    metrics.dummy_records = dummies;
-    metrics.setup_attempts = 1;
-    metrics.successful_inserts = options.keywords;
-    metrics.query_successes = query_successes;
-    metrics.candidate_records_total = query_successes;
-    metrics.candidate_records_max = query_successes == 0 ? 0 : 1;
-    metrics.decrypt_component_attempts = decrypt_component_attempts;
-    return metrics;
-}
-
-template <std::size_t DMax>
-Metrics Run(const Options& options) {
-    return options.layout == "paired" ? RunPaired<DMax>(options)
-                                      : RunOriginal<DMax>(options);
-}
-
 Metrics Dispatch(const Options& options) {
     switch (options.dmax) {
-        case 1: return Run<1>(options);
-        case 5: return Run<5>(options);
-        case 10: return Run<10>(options);
-        case 15: return Run<15>(options);
-        case 20: return Run<20>(options);
+        case 1: return RunPaired<1>(options);
+        case 5: return RunPaired<5>(options);
+        case 10: return RunPaired<10>(options);
+        case 15: return RunPaired<15>(options);
+        case 20: return RunPaired<20>(options);
         default:
             throw std::invalid_argument("--dmax must be one of 1,5,10,15,20");
     }
@@ -451,7 +366,7 @@ int main(int argc, char** argv) {
         const Metrics metrics = Dispatch(options);
         std::cout << std::fixed << std::setprecision(6)
                   << "RESULT"
-                  << " protocol=" << (options.layout == "paired" ? "paired_vlse" : "original_vlse")
+                  << " protocol=paired_vlse"
                   << " backend=ntl_gmp_modp3072"
                   << " group=" << vlse::oprf::PublicParameters::Identifier()
                   << " modulus_bits=3072"
