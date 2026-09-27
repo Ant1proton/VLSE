@@ -1,4 +1,3 @@
-# Out-of-tree builds and generated CMake files.
 /build*/
 /results/
 /CMakeCache.txt
@@ -6,31 +5,7 @@
 /Makefile
 /cmake_install.cmake
 /CTestTestfile.cmake
-
-# Local binaries from the former in-source build.
-/main
-/test_paired_vf
-
-# macOS and editor metadata.
 .DS_Store
 .vscode/
 __pycache__/
 *.pyc
-
-# Local research workspace files are intentionally not part of this demo.
-/data/
-/include/
-/src/
-/test/
-/util/
-/main.cpp
-/main copy.cpp
-/test_paired_vf.cpp
-/test_comparison.cpp
-/cryptopp_example.cpp
-/a.cpp
-/build.sh
-/run.sh
-/MurmurHash3.h
-/CODE_AUDIT_AND_DUMMY_RESULTS.md
-/PAIRED_VF_IMPLEMENTATION_AND_RESULTS.md

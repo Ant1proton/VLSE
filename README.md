@@ -1,111 +1,112 @@
 # VLSE
 
-## Get the source
+C++17 implementation and local benchmarks for VLSE and LSE.
 
-```bash
-git clone --recurse-submodules https://github.com/Ant1proton/VLSE.git
-cd VLSE
-```
+## Dependencies
 
-If the repository was cloned without its dependency:
+Install CMake, a C++17 compiler, NTL, GMP, Crypto++, and OpenSSL.
 
-```bash
-git submodule update --init --recursive
-```
+macOS with Homebrew:
 
-For a source archive that includes `Vacuum-Filter/hashutil.h`, extract the archive
-and run the following commands from its `VLSE` directory.
-
-## Install dependencies
-
-A C++17 compiler, CMake, NTL, GMP, Crypto++, and OpenSSL are required.
-
-### macOS with Homebrew
-
-```bash
+```sh
 brew install cmake llvm ntl gmp cryptopp openssl@3
 ```
 
-### Ubuntu/Debian
+Ubuntu/Debian:
 
-```bash
+```sh
 sudo apt-get update
 sudo apt-get install -y build-essential cmake git \
   libntl-dev libgmp-dev libcrypto++-dev libssl-dev
 ```
 
-## Build
+## Get the source
 
-### Apple Silicon macOS
-
-```bash
-cmake -S . -B build-release \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ \
-  -DCMAKE_PREFIX_PATH="/opt/homebrew;/opt/homebrew/opt/openssl@3"
-cmake --build build-release -j
+```sh
+git clone --recurse-submodules https://github.com/Ant1proton/VLSE.git
+cd VLSE
 ```
 
-### Linux
+For an existing checkout, initialize the dependency:
 
-```bash
+```sh
+git submodule update --init --recursive
+```
+
+## Build and test
+
+```sh
 cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release
-cmake --build build-release -j
-```
-
-## Test
-
-```bash
+cmake --build build-release -j 4
 ctest --test-dir build-release --output-on-failure
 ```
 
-## Run VLSE
+On Apple Silicon macOS, configure with Homebrew LLVM and library paths:
+
+```sh
+cmake -S . -B build-release -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ \
+  '-DCMAKE_PREFIX_PATH=/opt/homebrew;/opt/homebrew/opt/openssl@3'
+cmake --build build-release -j 4
+ctest --test-dir build-release --output-on-failure
+```
+
+## Run
 
 Run the example:
 
-```bash
+```sh
 ./build-release/paired_vlse/paired_vlse_demo
 ```
 
-Run a configurable experiment:
+Run VLSE with 16,384 keyword records and 1,000 queries:
 
-```bash
+```sh
 ./build-release/benchmarks/vlse_protocol_benchmark \
+  --keywords 16384 --queries 1000 --dmax 1 --seed 1
+```
+
+Run the LSE benchmark with the same workload settings:
+
+```sh
+./build-release/benchmarks/lse_protocol_benchmark \
   --keywords 16384 --queries 1000 --dmax 1 --seed 1
 ```
 
 | Argument | Meaning |
 |---|---|
 | `--keywords N` | Number of keyword records; positive integer. |
-| `--queries Q` | Number of member queries; positive integer no greater than `N`. |
-| `--dmax D` | Label capacity per record: `1`, `5`, `10`, `15`, or `20`. Use `1` for a single label. |
-| `--seed S` | Nonzero seed for the generated workload and filter layout. |
+| `--queries Q` | Number of member queries; between 1 and N. |
+| `--dmax D` | Label capacity per record: 1, 5, 10, 15, or 20. |
+| `--seed S` | Positive seed for keyword generation and index layout. |
 
-The program builds and pads the database, then checks the query results. It prints
-one `RESULT` line containing timings, object size, communication counts, and
-correctness counters.
+The generated workload fills every genuine record with D labels. Cryptographic
+keys and blinds use system randomness. Each executable prints a `RESULT` line.
+`online_ms` is the total time for all Q queries: token generation plus lookup and
+decryption. Divide by Q for the average time per query. Setup, offline blind
+precomputation, and network delay are excluded from online time.
 
-## Run the VLSE/LSE comparison
+VLSE authenticates all candidate components, collects valid document IDs, and
+sorts and deduplicates the result before ending the search timer. Expected
+results are checked after timing.
 
-The batch script requires macOS. From the repository root:
+## Batch runs
 
-```bash
+Run a smoke check:
+
+```sh
+bash scripts/run_smoke.sh
+```
+
+Run paired VLSE/LSE measurements on macOS (requires Python 3.10 or newer):
+
+```sh
+VLSE_COMPARE_SIZES="16384" \
+VLSE_COMPARE_ROUNDS=3 \
+VLSE_COMPARE_QUERIES=1000 \
+VLSE_COMPARE_DMAX=1 \
 bash scripts/run_paired_vs_lse.sh results/paired_vs_lse
 ```
 
-The default run uses 16,384, 32,768, 65,536, 131,072, and 262,144 keyword records,
-three rounds per size, 1,000 queries per round, and one label per record. Choose a
-new or empty output directory for each experiment.
-
-For a smaller run:
-
-```bash
-VLSE_COMPARE_SIZES="1024" \
-VLSE_COMPARE_ROUNDS=1 \
-VLSE_COMPARE_QUERIES=1000 \
-bash scripts/run_paired_vs_lse.sh results/small_run
-```
-
-The script writes individual logs under `logs/` and creates `raw_results.csv`,
-`summary.csv`, `query_checkpoints.csv`, and `communication_points.csv` in the
-selected output directory.
+Choose a new or empty output directory. The script saves logs and CSV summaries.
+It waits for background CPU activity to settle before each measurement.

@@ -111,7 +111,7 @@ std::uint64_t DecodeDocument(const Block& block) {
     return document;
 }
 
-Block AuthorAesEncrypt(const Block& key, const Block& plaintext) {
+Block AesEncrypt(const Block& key, const Block& plaintext) {
     CryptoPP::AES::Encryption encryptor;
     encryptor.SetKey(key.data(), key.size());
     Block output{};
@@ -120,7 +120,7 @@ Block AuthorAesEncrypt(const Block& key, const Block& plaintext) {
     return output;
 }
 
-Block AuthorAesDecrypt(const Block& key, const Block& ciphertext) {
+Block AesDecrypt(const Block& key, const Block& ciphertext) {
     CryptoPP::AES::Decryption decryptor;
     decryptor.SetKey(key.data(), key.size());
     Block output{};
@@ -137,7 +137,7 @@ std::array<std::uint8_t, 16> Low128LittleEndian(const Token& token) {
     return low;
 }
 
-class AuthorCuckooTable {
+class CuckooTable {
 public:
     struct Statistics {
         std::uint64_t successful_inserts = 0;
@@ -146,7 +146,7 @@ public:
         std::uint64_t maximum_relocation_chain = 0;
     };
 
-    AuthorCuckooTable(std::size_t keyword_count, std::uint64_t seed)
+    CuckooTable(std::size_t keyword_count, std::uint64_t seed)
         : bins_(std::max<std::size_t>(1, (keyword_count * 3 + 1) / 2)),
           occupied_(bins_.size(), false),
           random_(seed) {}
@@ -266,8 +266,7 @@ struct Metrics {
 
 Metrics Run(const Options& options) {
     const auto keywords = MakeKeywords(options.keywords, options.seed);
-    // LSE uses independent OPRF keys for its search token and symmetric key,
-    // matching the author's beta and beta1 separation.
+    // LSE uses independent OPRF keys for its search token and symmetric key.
     NtlOprf token_oprf{SecretKey{}};
     NtlOprf key_oprf{SecretKey{}};
 
@@ -277,7 +276,7 @@ Metrics Run(const Options& options) {
     const auto pre_end = Clock::now();
 
     const auto setup_start = Clock::now();
-    AuthorCuckooTable table(options.keywords, options.seed);
+    CuckooTable table(options.keywords, options.seed);
     std::map<Token, LabelList> encrypted_data;
     const auto initialization_end = Clock::now();
     for (std::size_t i = 0; i < keywords.size(); ++i) {
@@ -287,7 +286,7 @@ Metrics Run(const Options& options) {
         LabelList labels;
         labels.reserve(options.dmax);
         for (std::size_t j = 0; j < options.dmax; ++j) {
-            labels.push_back(AuthorAesEncrypt(
+            labels.push_back(AesEncrypt(
                 key, EncodeDocument(i * options.dmax + j + 1)));
         }
         encrypted_data.emplace(token, std::move(labels));
@@ -337,7 +336,7 @@ Metrics Run(const Options& options) {
         }
         for (std::size_t j = 0; j < options.dmax; ++j) {
             ++decrypt_component_attempts;
-            const Block plaintext = AuthorAesDecrypt(key, iterator->second[j]);
+            const Block plaintext = AesDecrypt(key, iterator->second[j]);
             if (DecodeDocument(plaintext) != i * options.dmax + j + 1) {
                 throw std::runtime_error("LSE AES decryption mismatch");
             }

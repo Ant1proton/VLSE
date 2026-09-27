@@ -3,10 +3,10 @@
 // Long-fingerprint, payload-aligned Vacuum Filter for VLSE.
 //
 // The placement and semi-sorting ideas follow the MIT-licensed implementation
-// by Mingxun Zhou (https://github.com/wuwuz/Vacuum-Filter).  The bucket codec
-// below removes the original <=64-bit encoded-bucket limitation by reading and
-// writing arbitrary bit fields across machine words.  Fingerprints and payloads
-// are always sorted, evicted, committed, and rolled back as one Record.
+// by Mingxun Zhou (https://github.com/wuwuz/Vacuum-Filter).
+// The bucket codec reads and writes bit fields across machine words.
+// Fingerprints and payloads are sorted, evicted, committed, and rolled back
+// as one Record.
 
 #include <algorithm>
 #include <array>

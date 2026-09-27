@@ -24,8 +24,8 @@ int main() {
                  {65536, 81920, 4034560}, {131072, 163840, 8069120},
                  {262144, 294912, 14524416}}}) {
             Index index(c.items, 0.95, 500);
-            Check(index.capacity() == c.slots, "paper slot count changed");
-            Check(index.total_logical_bytes() == c.bytes, "paper object size changed");
+            Check(index.capacity() == c.slots, "unexpected slot count");
+            Check(index.total_logical_bytes() == c.bytes, "unexpected object size");
             Check(index.logical_fingerprint_bytes() == index.bucket_count() * 21,
                   "four 43-bit fingerprints must encode to 21 bytes");
             Check(index.payload_bytes() == c.slots * 44, "label byte count changed");
@@ -76,7 +76,7 @@ int main() {
                   candidates[0].ciphertext == first.ciphertext &&
                   candidates[0].tag == first.tag, "rebuild changed ciphertext");
         }
-        std::cout << "protocol_contract_test: PASS (five paper sizes, nonce and authentication)\n";
+        std::cout << "protocol_contract_test: PASS (five database sizes, nonce and authentication)\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';

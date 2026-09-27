@@ -30,7 +30,6 @@ cmake -S "${repo_dir}" -B "${build_dir}" -DCMAKE_BUILD_TYPE=Release \
   2>&1 | redact_local_identifiers > "${result_dir}/configure.log"
 cmake --build "${build_dir}" -j 2>&1 | redact_local_identifiers > "${result_dir}/build.log"
 ctest --test-dir "${build_dir}" \
-  -R 'oprf_consistency|paired_collision|protocol_contract|vlse_paired_protocol_smoke|lse_protocol_smoke' \
   --output-on-failure 2>&1 | redact_local_identifiers > "${result_dir}/ctest.log"
 
 environment_file="${result_dir}/environment.txt"

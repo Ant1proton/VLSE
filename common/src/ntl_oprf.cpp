@@ -15,11 +15,9 @@ using CryptoPP::AutoSeededRandomPool;
 using CryptoPP::SHAKE256;
 using NTL::ZZ;
 
-// FIPS-style finite-field parameters with L=3072 and N=256.  They were
-// generated once with OpenSSL 3.6.0's DSA parameter generator; the exact PEM,
-// generation command, and digest are kept in common/parameters.  The OPRF
-// works in the order-q subgroup, so its key, blind, and inverse are uniformly
-// sampled 256-bit scalars rather than full-size field exponents.
+// Finite-field parameters with a 3072-bit modulus and 256-bit subgroup order.
+// The PEM is stored in common/parameters. Keys, blinds, and their inverses
+// are scalars in the order-q subgroup.
 constexpr char kModulusHex[] =
     "CF8CB8FB77EBBFC71AA88CB93DCFB77868DC881AB89F116B"
     "4BAB48285D47F342B5A2113777D2E72112BFF2A598985FBE"

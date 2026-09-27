@@ -18,6 +18,7 @@
 #include <openssl/rand.h>
 
 #include "aead_label.h"
+#include "authenticated_results.h"
 #include "ntl_oprf.h"
 #include "paired_vacuum_filter.h"
 #include "protocol_derivation.h"
@@ -127,35 +128,6 @@ vlse::protocol::AeadRecord<DMax> MakeRecord(
             valid ? document_base + j : 0);
     }
     return record;
-}
-
-template <std::size_t DMax>
-bool DecryptExpected(
-    const vlse::protocol::AeadRecord<DMax>& record,
-    const TokenKeyPair& derived,
-    std::uint64_t epoch,
-    std::uint64_t expected_base,
-    std::uint64_t* component_attempts = nullptr) {
-    const vlse::AeadKey128 key = derived.key;
-    for (std::size_t j = 0; j < DMax; ++j) {
-        if (component_attempts != nullptr) {
-            ++(*component_attempts);
-        }
-        bool valid = false;
-        std::uint64_t document = 0;
-        if (!vlse::DecryptLabel(
-                key,
-                epoch,
-                derived.token,
-                static_cast<std::uint32_t>(j),
-                record.components[j],
-                &valid,
-                &document) ||
-            !valid || document != expected_base + j) {
-            return false;
-        }
-    }
-    return true;
 }
 
 struct Metrics {
@@ -288,21 +260,25 @@ Metrics RunPaired(const Options& options) {
         candidate_records_total += candidates.size();
         candidate_records_max = std::max<std::uint64_t>(
             candidate_records_max, candidates.size());
-        bool found = false;
-        for (const Record& candidate : candidates) {
-            if (DecryptExpected<DMax>(
-                    candidate,
-                    derived,
-                    epoch,
-                    i * DMax + 1,
-                    &decrypt_component_attempts)) {
-                found = true;
-                break;
+        const auto results =
+            vlse::benchmark::CollectAuthenticatedResults<
+                DMax, 2 * Index::kSlotsPerBucket>(
+                candidates, derived, epoch, decrypt_component_attempts);
+        const auto search_end = Clock::now();
+
+        // Benchmark-only expected-answer comparison is outside timing.
+        const std::uint64_t expected_base = i * DMax + 1;
+        bool correct = (results.size == DMax);
+        if (correct) {
+            for (std::size_t j = 0; j < DMax; ++j) {
+                if (results.documents[j] != expected_base + j) {
+                    correct = false;
+                    break;
+                }
             }
         }
-        const auto search_end = Clock::now();
-        if (!found) {
-            throw std::runtime_error("paired authenticated lookup failed");
+        if (!correct) {
+            throw std::runtime_error("paired authenticated result set mismatch");
         }
         ++query_successes;
         tgen_ms += Milliseconds(tgen_end - tgen_start);
@@ -314,6 +290,11 @@ Metrics RunPaired(const Options& options) {
                 break;
             }
         }
+    }
+
+    if (decrypt_component_attempts !=
+        candidate_records_total * static_cast<std::uint64_t>(DMax)) {
+        throw std::runtime_error("incomplete candidate/component traversal");
     }
 
     Metrics metrics;

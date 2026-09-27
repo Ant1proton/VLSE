@@ -49,9 +49,7 @@ inline TokenKeyPair DeriveTokenAndKey(const oprf::OprfOutput& output) {
 }
 
 inline Key128 LseAesKey(const oprf::OprfOutput& output) {
-    // The author implementation converts the group value to a 16-byte AES
-    // block, thereby retaining its least-significant 128 bits.  The common
-    // backend uses a fixed big-endian encoding, so those bytes are the suffix.
+    // Use the least-significant 128 bits of the big-endian group encoding.
     Key128 key{};
     std::copy(output.end() - key.size(), output.end(), key.begin());
     return key;
